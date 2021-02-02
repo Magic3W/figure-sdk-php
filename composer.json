@@ -1,0 +1,24 @@
+{
+    "name": "magic3w/figure-sdk-php",
+    "description": "SDK for interacting with figure",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "César de la Cal Bretschneider",
+            "email": "cesar@magic3w.com"
+        }
+    ],
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"autoload": {
+		"psr-4": {
+			"figure\\sdk\\" : "./src"
+		}
+	},
+    "require": {
+        "spitfire/request": "dev-master",
+        "magic3w/phpauth-sdk-php": "^0.1.1",
+        "spitfire/collection": "^0.1.0"
+    }
+}
