@@ -65,7 +65,7 @@ class Upload
 	public function media($size)
 	{
 		$media = $this->payload->media->{$size};
-		return new Media($media->mime, $media->width, $media->height, $media->url);
+		return new Media($this->payload->type, $media->mime, $media->width, $media->height, $media->url);
 	}
 	
 	/**
@@ -84,7 +84,7 @@ class Upload
 		foreach ($this->payload->media->{$size}->poster as $poster) {
 			#TODO: Introduce a class that wraps around the image and generates the 
 			# appropriate renderer for it.
-			$_ret->push(new Media($poster->mime, $poster->width, $poster->height, $poster->url)); 
+			$_ret->push(new Media('image', $poster->mime, $poster->width, $poster->height, $poster->url)); 
 		}
 		
 		return $_ret;

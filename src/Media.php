@@ -1,5 +1,7 @@
 <?php namespace figure\sdk;
 
+use Exception;
+
 /* 
  * The MIT License
  *
@@ -33,16 +35,33 @@
 class Media
 {
 	
+	private $type;
 	private $mime;
 	private $width;
 	private $height;
 	private $url;
 	
-	public function __construct($mime, $width, $height, $url) {
+	public function __construct($type, $mime, $width, $height, $url) 
+	{
+		$this->type = $type;
 		$this->mime = $mime;
 		$this->width = $width;
 		$this->height = $height;
 		$this->url = $url;
+	}
+	
+	/**
+	 * The type of media is determined by the server when a file is uploaded. It provides
+	 * different data than the mime type, because it's sometimes more specific than the 
+	 * mime and sometimes way less specific.
+	 * 
+	 * For example, png, jpg, etc are all treated as image, while an mp4 file may contain
+	 * an animation (silent and looping) or a video (with sound, no autoplay, no loop).
+	 * 
+	 * @return string
+	 */
+	public function getType() {
+		return $this->type;
 	}
 	
 	public function getMime() {
@@ -61,5 +80,35 @@ class Media
 		return $this->url;
 	}
 	
-	#TODO: Add a toJSON / fromJSON method
+	/**
+	 * Exports the current object to JSON. This mechanism makes it easy for applications
+	 * using figure to cache the result of an upload.
+	 * 
+	 * @return string
+	 */
+	public function toJSON() 
+	{
+		return json_encode([
+			'version' => 1,
+			'type' => $this->type,
+			'mime' => $this->mime,
+			'width' => $this->width,
+			'height' => $this->height,
+			'url' => $this->url
+		]);
+	}
+	
+	/**
+	 * Create an instance of a Media object from the JSON representation generated
+	 * by toJSON(). 
+	 */
+	public static function fromJSON($string) {
+		$data = json_decode($string);
+		
+		if ($data->version !== 1) {
+			throw new Exception('Version missmatch when loading figure media from JSON');
+		}
+		
+		return new self($data->type, $data->mime, $data->width, $data->height, $data->url);
+	}
 }
