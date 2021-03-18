@@ -96,15 +96,15 @@ class Client
 	 * 
 	 * @param int $id
 	 * @param string $secret
-	 * @return bool
+	 * @return Client
 	 */
-	public function claim(int $id, string $secret) : bool
+	public function claim(int $id, string $secret) : Client
 	{
-		$request = new Request(sprintf('%s/upload/claim/%s/%s.json', $this->endpoint, $id, $secret));
-		$request->get('token', (string)$this->token->getId());
+		$request = new Request(sprintf('%s/upload/claim/%s/%s.json', $this->url(), $id, $secret));
+		$request->header('Authentication', sprintf('Bearer %s', (string)$this->token->getId()));
 		$request->send();
 		
-		return true;
+		return $this;
 	}
 	
 	/**
@@ -117,8 +117,8 @@ class Client
 	 */
 	public function delete(int $id) : bool
 	{
-		$request = new Request(sprintf('%s/upload/delete/%s.json', $this->endpoint, $id));
-		$request->get('token', (string)$this->token->getId());
+		$request = new Request(sprintf('%s/upload/delete/%s.json', $this->url(), $id));
+		$request->header('Authentication', sprintf('Bearer %s', (string)$this->token->getId()));
 		$request->send();
 		
 		return true;
@@ -133,8 +133,8 @@ class Client
 	 */
 	public function retrieve(int $id) : Upload
 	{
-		$request = new Request(sprintf('%s/upload/retrieve/%s.json', $this->endpoint, $id));
-		$request->get('token', (string)$this->token->getId());
+		$request = new Request(sprintf('%s/upload/retrieve/%s.json', $this->url(), $id));
+		$request->header('Authentication', sprintf('Bearer %s', (string)$this->token->getId()));
 		$response = $request->send()->expect(200)->json();
 		
 		return new Upload($response->payload);
