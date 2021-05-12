@@ -35,13 +35,45 @@ use Exception;
 class Media
 {
 	
+	/**
+	 * 
+	 * @var string
+	 */
 	private $type;
+	
+	/**
+	 * 
+	 * @var string
+	 */
 	private $mime;
+	
+	/**
+	 * 
+	 * @var int
+	 */
 	private $width;
+	
+	/**
+	 * 
+	 * @var int
+	 */
 	private $height;
+	
+	/**
+	 * 
+	 * @var string
+	 */
 	private $url;
 	
-	public function __construct($type, $mime, $width, $height, $url) 
+	/**
+	 * 
+	 * @param string $type
+	 * @param string $mime
+	 * @param int $width
+	 * @param int $height
+	 * @param string $url
+	 */
+	public function __construct(string $type, string $mime, int $width, int $height, string $url) 
 	{
 		$this->type = $type;
 		$this->mime = $mime;
@@ -64,19 +96,39 @@ class Media
 		return $this->type;
 	}
 	
-	public function getMime() {
+	/**
+	 * 
+	 * @return string
+	 */
+	public function getMime() : string
+	{
 		return $this->mime;
 	}
 	
-	public function getWidth() {
+	/**
+	 * 
+	 * @return int
+	 */
+	public function getWidth() : int
+	{
 		return $this->width;
 	}
 	
-	public function getHeight() {
+	/**
+	 * 
+	 * @return int
+	 */
+	public function getHeight() : int
+	{
 		return $this->height;
 	}
 	
-	public function getUrl() {
+	/**
+	 * 
+	 * @return string
+	 */
+	public function getUrl() : string
+	{
 		return $this->url;
 	}
 	
@@ -86,9 +138,9 @@ class Media
 	 * 
 	 * @return string
 	 */
-	public function toJSON() 
+	public function toJSON() : string
 	{
-		return json_encode([
+		$json = json_encode([
 			'version' => 1,
 			'type' => $this->type,
 			'mime' => $this->mime,
@@ -96,13 +148,27 @@ class Media
 			'height' => $this->height,
 			'url' => $this->url
 		]);
+		
+		/**
+		 * We do not tolerate the json failing to generate an invalid output. In this case
+		 * the application should fail.
+		 */
+		if($json === false) {
+			throw new Exception('Unable to encode Media into JSON string.', 2105121000);
+		}
+		
+		return $json;
 	}
 	
 	/**
 	 * Create an instance of a Media object from the JSON representation generated
 	 * by toJSON(). 
+	 * 
+	 * @param string $string
+	 * @return Media
 	 */
-	public static function fromJSON($string) {
+	public static function fromJSON($string) : Media
+	{
 		$data = json_decode($string);
 		
 		if ($data->version !== 1) {

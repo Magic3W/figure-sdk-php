@@ -37,6 +37,11 @@ use spitfire\io\request\Request;
 class Client
 {
 	
+	/**
+	 * The url where the PHPAuth Server is residing and handling requests.
+	 * 
+	 * @var string
+	 */
 	private $endpoint;
 	
 	/**
@@ -47,10 +52,10 @@ class Client
 	
 	/**
 	 * 
-	 * @param type $endpoint
-	 * @param SSO $token
+	 * @param string $endpoint
+	 * @param SSO|Token $token
 	 */
-	public function __construct($endpoint, $token) 
+	public function __construct(string $endpoint, $token) 
 	{
 		$reflection = URLReflection::fromURL($endpoint);
 		$this->endpoint = (string)($reflection->stripCredentials());
@@ -108,12 +113,15 @@ class Client
 	 * resource.
 	 * 
 	 * @param int $id
+	 * @return bool Will be false on failure.
 	 */
-	public function delete(int $id) 
+	public function delete(int $id) : bool
 	{
 		$request = new Request(sprintf('%s/upload/delete/%s.json', $this->endpoint, $id));
 		$request->get('token', (string)$this->token->getId());
 		$request->send();
+		
+		return true;
 	}
 	
 	/**
