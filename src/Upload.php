@@ -50,7 +50,8 @@ class Upload
 	 * 
 	 * @param mixed $payload
 	 */
-	public function __construct($payload) {
+	public function __construct($payload)
+	{
 		$this->payload = $payload;
 	}
 	
@@ -99,5 +100,4 @@ class Upload
 	{
 		return $this->payload->type;
 	}
-	
 }

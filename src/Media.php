@@ -92,7 +92,8 @@ class Media
 	 * 
 	 * @return string
 	 */
-	public function getType() {
+	public function getType()
+	{
 		return $this->type;
 	}
 	
@@ -153,7 +154,7 @@ class Media
 		 * We do not tolerate the json failing to generate an invalid output. In this case
 		 * the application should fail.
 		 */
-		if($json === false) {
+		if ($json === false) {
 			throw new Exception('Unable to encode Media into JSON string.', 2105121000);
 		}
 		

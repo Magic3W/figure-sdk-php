@@ -70,7 +70,10 @@ class Client
 		}
 		
 		else {
-			throw new BadMethodCallException('Figure client cannot be invoked without a valid token or SSO instance', 2102021403);
+			throw new BadMethodCallException(
+				'Figure client cannot be invoked without a valid token or SSO instance', 
+				2102021403
+			);
 		}
 	}
 	
@@ -139,5 +142,4 @@ class Client
 		
 		return new Upload($response->payload);
 	}
-	
 }
